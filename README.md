@@ -24,11 +24,7 @@ You can also pass an input file as script command argument just like this:
 - Given the dictionary entries, could answer the questions
 - Given the answers, can output
 
-## Dependencies
-
-If needed...
-
-## Ping Me
+## Ping me if you need
 
 Email: mauriciovoto@gmail.com
 Skype: mauricio.voto
