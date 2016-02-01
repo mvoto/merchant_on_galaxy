@@ -26,33 +26,37 @@ class Translator
   end
 
   private
-  attr_reader :rules, :questions
+  attr_reader :rules, :questions, :intergalactic_values_hash
 
   def create_dictionary
-    hsh = { }
-    rules.map do |rule|
-      hsh.merge!(mount_value_hash(rule)) if value_sentence?
-      hsh.merge!(mount_materials_hash(rule)) if value_sentence?
-    end
+    values_hash = {}
+    rules.map{ |rule| values_hash.merge!(mount_value_hash(rule)) if value_sentence? }
+    @values_hash = intergalactic_values_hash
+    # rules.map{ |rule| calculate_materials }
 
     def value_sentence?
       !!rule.match(/\w+\sis\s\w/)
     end
 
-    def mount_value_hash(rule)
+    def values_hash(rule)
       rule_array = rule.split(' ')
       { rule_array.first.to_sym => ROMAN_TO_ARABIC[rule_array.last.to_sym] }
     end
 
-    def mount_materials_hash(rule)
-      # gets the material word from rule sentence
-      material     = rule[/\w*(?=\sis\s\d\w\sCredits)/].to_sym
+    def calculate_materials(rule)
+      # gets the material word from rule sentence(word before is X Credits)
+      material = rule[/\w*(?=\sis\s\d\w\sCredits)/].to_sym
+      # gets the credit value digit from rule sentence(digit before Credits)
       credit_value = rule[/\d*(?=\sCredits)/].to_sym
-      # Os materiais servem para multiplicar os valores obtidos...
+      # gets the unkown values words from rule sentence(everything before #{material})
+      intergalactic_value = rule[/.*(?=\s#{material})/]
+
+      arabic_value = mount_roman(intergalactic_value)
+      # Materials values are like multipliers *
     end
 
-    def roman_to_integer(full_roman)
-      full_roman
+    def mount_roman(intergalactic_value)
+      intergalactic_value.split(' ').map { |value| intergalactic_values_hash[value] }
     end
   end
 end
