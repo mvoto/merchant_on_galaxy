@@ -1,0 +1,2 @@
+class InvalidContentError < StandardError
+end
