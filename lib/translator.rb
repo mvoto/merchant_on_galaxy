@@ -46,9 +46,13 @@ class Translator
 
     def mount_materials_hash(rule)
       # gets the material word from rule sentence
-      material = rule[/\w*(?=\sis\s\d\w\sCredits)/].to_sym
+      material     = rule[/\w*(?=\sis\s\d\w\sCredits)/].to_sym
+      credit_value = rule[/\d*(?=\sCredits)/].to_sym
+      # Os materiais servem para multiplicar os valores obtidos...
     end
 
-    # Os materiais servem para multiplicar os valores obtidos...
+    def roman_to_integer(full_roman)
+      full_roman
+    end
   end
 end

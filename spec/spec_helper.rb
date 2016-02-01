@@ -8,6 +8,7 @@ end
 require 'pry'
 
 Dir['./lib/errors/*.rb'].each { |file| require file }
+require  './lib/numeral_converter.rb'
 require  './lib/file_reader.rb'
 require  './lib/translator.rb'
 require './lib/merchant_on_galaxy.rb'
