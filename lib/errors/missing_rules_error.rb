@@ -1,0 +1,3 @@
+class MissingRulesError < StandardError
+
+end

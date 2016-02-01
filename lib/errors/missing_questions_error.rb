@@ -1,0 +1,3 @@
+class MissingQuestionsError < StandardError
+
+end
