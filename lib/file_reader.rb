@@ -5,17 +5,18 @@ class FileReader
     @input_file = input_file
 
     validate_file
-    @input_lines = File.read(input_file).split(/\n/)
-    @rules       = input_lines.reject { |line| question?(line) }
-    @questions   = input_lines.select { |line| question?(line) }
+    @input_lines    = File.read(input_file).split(/\n/)
+    @intergalactics = input_lines.select { |line| intergalactic?(line) }
+    @questions      = input_lines.select { |line| question?(line) }
+    @credits        = input_lines.select { |line| credit?(line) }
     validate_content
 
-    { rules: rules, questions: questions }
+    { intergalactics: intergalactics, credits: credits, questions: questions }
   end
 
   private
   class << self
-    attr_reader :input_file, :input_lines, :rules, :questions
+    attr_reader :input_file, :input_lines, :intergalactics, :credits, :questions
   end
 
   def self.validate_file
@@ -23,7 +24,17 @@ class FileReader
   end
 
   def self.validate_content
-    raise InvalidContentError if rules.empty? || questions.empty?
+    if intergalactics.empty? || credits.empty? || questions.empty?
+      raise InvalidContentError
+    end
+  end
+
+  def self.intergalactic?(sentence)
+    !credit?(sentence) && !question?(sentence)
+  end
+
+  def self.credit?(sentence)
+    sentence.end_with?('Credits')
   end
 
   def self.question?(sentence)
