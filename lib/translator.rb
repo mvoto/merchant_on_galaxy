@@ -1,88 +1,54 @@
-# This class receives questions and rules and:
-#   CREATES A DICTIONARY AND
-#   ANSWERS THE QUESTIONS
+# Given intergalactics and credits info, this class figures out the arabic values for
+# intergalactic info and mineral info(Silver, Gold, Iron)
 class Translator
-
-  # TODO: refactor this huge responsability class
-
-  # We have rules and questions
-  # First we need to separate roman definition from credit definition
-  # After figuring out intergalactic vs roman, we need to get intergalactics from Credits sentences
-  # Then we need to translate roman to arabic
-  # After all, we can figure out material multiplier value(Silver, Gold...), from Credits sentence
-  # Then we can calculate and generate output
-
-  ROMAN_TO_ARABIC = {
-    I: 1,
-    V: 5,
-    X: 10,
-    L: 50,
-    C: 100,
-    D: 500,
-    M: 1000
-  }
+  attr_reader :intergalactic_hash, :mineral_hash, :questions
 
   def initialize(args = {})
-    @rules     = args[:rules]
-    @questions = args[:questions]
+    @intergalactics = args[:intergalactics]
+    @credits        = args[:credits]
+    @questions      = args[:questions]
 
-    raise MissingRulesError if rules.empty?
+    raise MissingRulesError if intergalactics.empty? || credits.empty?
     raise MissingQuestionsError if questions.empty?
 
-    @intergalactic_hash = mount_integalactic_hash
-  end
-
-  def answer_questions
-    # TODO
-    []
+    @intergalactic_hash = generate_intergalactics_hash
+    @mineral_hash       = generate_minerals_hash
   end
 
   private
-  attr_reader :rules, :questions, :intergalactic_hash
+  attr_reader :intergalactics, :credits
 
-
-  # def arabic_from_intergalactic
-  #   translated_values = NumeralConverter.intergalactic_to_roman(integalactic_hash(rules))
-  # end
-
-  # This would mount something like this:
-  # {
-  #   glob: I,
-  #   pish: V,
-  #   grok: X
-  # }
-  def mount_integalactic_hash
+  # This mounts something like this: { glob: I, pish: V , grok: X }
+  def generate_intergalactics_hash
     hsh = {}
-
-    rules.each do |rule|
-      hsh.merge!(intergalactic_key_value(rule)) if intergalactic_sentence?
-    end
+    intergalactics.each { |sentence| update_intergalactic_hash(hsh, sentence) }
 
     hsh
   end
 
-  def intergalactic_sentence?
-    !!rule.match(/\w+\sis\s\w/)
+  # This mounts something like this: { :Silver => 7, :Gold => 21, :Iron => 2 }
+  def generate_minerals_hash
+    hsh = {}
+    credits.each { |credit| update_credit_hash(hsh, credit) }
+    hsh
   end
 
-  def intergalactic_key_value(rule)
-    rule_array = rule.split(' ')
-    arabic = NumeralConverter.roman_to_arabic(ROMAN_TO_ARABIC[rule_array.last.to_sym])
-
-    { rule_array.first.to_sym => arabic }
+  def update_intergalactic_hash(hsh, intergalactic)
+    hsh[intergalactic.split(' ').first.to_sym] = intergalactic.split(' ').last
   end
 
+  def update_credit_hash(hsh, credit)
+    sentence_value = credit.split(/\s[A-Z][a-z]+/).first
 
+    arabic       = arabic_value(sentence_value)
+    credit_value = credit[/\d+(?=\sCredits)/]
+    material     = credit[/\w+(?=\sis\s\d+\sCredits)/]
 
-  def calculate_materials(rule)
-    # gets the material word from rule sentence(word before is X Credits)
-    material = rule[/\w*(?=\sis\s\d\w\sCredits)/].to_sym
-    # gets the credit value digit from rule sentence(digit before Credits)
-    credit_value = rule[/\d*(?=\sCredits)/].to_sym
-    # gets the unkown values words from rule sentence(everything before #{material})
-    intergalactic_value = rule[/.*(?=\s#{material})/]
+    hsh[material.to_sym] = credit_value.to_f / arabic
+  end
 
-    arabic_value = mount_roman(intergalactic_value)
-    # Materials values are like multipliers *
+  def arabic_value(sentence)
+    roman = sentence.split(' ').map { |interg| intergalactic_hash[interg.to_sym] }.join
+    NumeralConverter.roman_to_arabic(roman)
   end
 end
