@@ -28,9 +28,4 @@ class NumeralConverter
 
     result
   end
-
-  # This is used for Credits sentence
-  def self.intergalactic_to_roman(intergalactic_values, value)
-    intergalactic_values.split(' ').map { |value| intergalactic_values_hash[value] }
-  end
 end
