@@ -8,11 +8,13 @@ Galaxy and may need to convert their intergalactic units into numerals.
 Run ```bundle install``` to install all dependencies([bundler](https://github.com/bundler/bundler) for more info)
 Then run the script on the terminal, inside this project's folder by running:
 
-```ruby lib/merchant_on_galaxy.rb```
+```bundle exec ruby bin/merchant```
 
 You can also pass an input file as script command argument just like this:
 
 ```ruby lib/merchant_on_galaxy.rb /home/any_file.txt```
+
+But please, do follow the input sample file format standards.
 
 ## Script Flow
 
