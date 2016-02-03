@@ -31,6 +31,7 @@ class Translator
   def minerals_hash
     hsh = {}
     credits.each { |credit| update_credit_hash(hsh, credit) }
+
     hsh
   end
 
@@ -42,11 +43,18 @@ class Translator
     credit_info = CreditInfo.new(credit)
     arabic      = arabic_value(credit_info.until_material_word)
 
-    hsh[credit_info.material.to_sym] = credit_info.value.to_f / arabic
+    hsh[credit_info.material.to_sym] = material_value(credit_info, arabic)
   end
 
   def arabic_value(sentence)
-    roman = sentence.split(' ').map { |interg| intergalactics_hash[interg.to_sym] }.join
-    NumeralConverter.roman_to_arabic(roman)
+    NumeralConverter.roman_to_arabic(roman(sentence))
+  end
+
+  def roman(sentence)
+    sentence.split(' ').map { |interg| intergalactics_hash[interg.to_sym] }.join
+  end
+
+  def material_value(credit_info, arabic)
+    credit_info.value.to_f / arabic
   end
 end
