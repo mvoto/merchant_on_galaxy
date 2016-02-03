@@ -24,7 +24,7 @@ But please, do follow the input sample file format standards.
 - Given the read lines, defines sentences as questions
 - Given the rules, should be used as dictionary entries
 - Given the dictionary entries, could answer the questions
-- Given the answers, can output
+- Given the answers, can output correctly
 
 ## Ping me if you need
 
