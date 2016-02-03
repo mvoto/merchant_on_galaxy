@@ -25,6 +25,7 @@ class Oracle
   end
 
   def self.answer_credit(question)
+    # TODO: Create a QuestionInfo class(such as CreditInfo) to refactor all that regex mess
     full_sentence  = question[/(?<=how\smany\sCredits\sis\s)(.*)(?=\s\?)/]
     return weird_question_message if full_sentence.nil? || !full_sentence.match(/[A-Z][a-z]+/)
     mineral        = full_sentence[/[A-Z][a-z]+/]
@@ -41,6 +42,7 @@ class Oracle
     intergalactics = question[/(?<=how\smuch\sis\s)(.*)(?=\s\?)/]
     return weird_question_message if intergalactics.nil?
 
+    # TODO: maybe a method would help here ?
     roman = intergalactics.split(' ').map do |interg|
       roman_value = dictionary[:intergalactic][interg.to_sym]
       return weird_question_message if roman_value.nil?
