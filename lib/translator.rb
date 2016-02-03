@@ -1,25 +1,26 @@
 # Given intergalactics and credits info, this class figures out the arabic values for
 # intergalactic info and mineral info(Silver, Gold, Iron)
 class Translator
-  attr_reader :intergalactic_hash, :mineral_hash, :questions
+  attr_reader :dictionary, :questions
 
   def initialize(args = {})
     @intergalactics = args[:intergalactics]
     @credits        = args[:credits]
     @questions      = args[:questions]
+  end
 
-    raise MissingRulesError if intergalactics.empty? || credits.empty?
-    raise MissingQuestionsError if questions.empty?
-
-    @intergalactic_hash = generate_intergalactics_hash
-    @mineral_hash       = generate_minerals_hash
+  def dictionary
+    @dictionary ||= {
+      intergalactic: intergalactics_hash,
+      mineral: minerals_hash
+    }
   end
 
   private
   attr_reader :intergalactics, :credits
 
   # This mounts something like this: { glob: I, pish: V , grok: X }
-  def generate_intergalactics_hash
+  def intergalactics_hash
     hsh = {}
     intergalactics.each { |sentence| update_intergalactic_hash(hsh, sentence) }
 
@@ -27,7 +28,7 @@ class Translator
   end
 
   # This mounts something like this: { :Silver => 7, :Gold => 21, :Iron => 2 }
-  def generate_minerals_hash
+  def minerals_hash
     hsh = {}
     credits.each { |credit| update_credit_hash(hsh, credit) }
     hsh
@@ -38,17 +39,14 @@ class Translator
   end
 
   def update_credit_hash(hsh, credit)
-    sentence_value = credit.split(/\s[A-Z][a-z]+/).first
+    credit_info = CreditInfo.new(credit)
+    arabic      = arabic_value(credit_info.until_material_word)
 
-    arabic       = arabic_value(sentence_value)
-    credit_value = credit[/\d+(?=\sCredits)/]
-    material     = credit[/\w+(?=\sis\s\d+\sCredits)/]
-
-    hsh[material.to_sym] = credit_value.to_f / arabic
+    hsh[credit_info.material.to_sym] = credit_info.value.to_f / arabic
   end
 
   def arabic_value(sentence)
-    roman = sentence.split(' ').map { |interg| intergalactic_hash[interg.to_sym] }.join
+    roman = sentence.split(' ').map { |interg| intergalactics_hash[interg.to_sym] }.join
     NumeralConverter.roman_to_arabic(roman)
   end
 end

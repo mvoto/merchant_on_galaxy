@@ -2,18 +2,18 @@
 class Oracle
 
   def self.perform(translator)
-    @translator = translator
+    @dictionary = translator.dictionary
 
-    answer_questions
+    answer_questions(translator.questions)
   end
 
   private
   class << self
-    attr_reader :translator
+    attr_reader :dictionary
   end
 
-  def self.answer_questions
-    answers = translator.questions.map do |question|
+  def self.answer_questions(questions)
+    answers = questions.map do |question|
       credit_question?(question) ? answer_credit(question) : answer_roman(question)
     end
 
@@ -30,9 +30,9 @@ class Oracle
     mineral        = full_sentence[/[A-Z][a-z]+/]
     intergalactics = full_sentence[/.*(?=\s[A-Z][a-z]+)/]
 
-    roman = intergalactics.split(' ').map { |interg| @translator.intergalactic_hash[interg.to_sym] }.join
+    roman = intergalactics.split(' ').map { |interg| dictionary[:intergalactic][interg.to_sym] }.join
     return weird_question_message if roman.empty?
-    answer_value = NumeralConverter.roman_to_arabic(roman) * @translator.mineral_hash[mineral.to_sym]
+    answer_value = NumeralConverter.roman_to_arabic(roman) * dictionary[:mineral][mineral.to_sym]
 
     "#{full_sentence} is #{sprintf("%g", answer_value)} Credits"
   end
@@ -42,7 +42,7 @@ class Oracle
     return weird_question_message if intergalactics.nil?
 
     roman = intergalactics.split(' ').map do |interg|
-      roman_value = @translator.intergalactic_hash[interg.to_sym]
+      roman_value = dictionary[:intergalactic][interg.to_sym]
       return weird_question_message if roman_value.nil?
       roman_value
     end.join

@@ -3,6 +3,7 @@ Bundler.require :default
 Dir['./lib/errors/*.rb'].each { |file| require file }
 require  './lib/numeral_converter.rb'
 require  './lib/file_reader.rb'
+require  './lib/credit_info.rb'
 require  './lib/translator.rb'
 require  './lib/oracle.rb'
 require  './lib/merchant_on_galaxy.rb'
@@ -13,12 +14,11 @@ class MerchantOnGalaxy
   # Setup translator and ask Oracle to answer questions with translated dictionary
   def self.run(input_file)
     content_hash = FileReader.perform(input_file)
-    dictionary   = Translator.new(content_hash)
-    answers      = Oracle.perform(dictionary)
+    translator   = Translator.new(content_hash)
+    answers      = Oracle.perform(translator)
 
     answers.join("\n")
-  rescue InvalidInputError, InvalidContentError, MissingQuestionsError,
-    MissingRulesError => e
+  rescue InvalidInputError, InvalidContentError => e
     puts "Sorry, something went wrong: #{e.message}"
   end
 end
