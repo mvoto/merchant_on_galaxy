@@ -4,6 +4,7 @@ class FileReader
   def self.perform(input_file)
     validate_file(input_file)
     @input_lines = File.read(input_file).split(/\n/)
+    validate_content
 
     { intergalactics: intergalactics, credits: credits, questions: questions }
   end
@@ -15,6 +16,12 @@ class FileReader
 
   def self.validate_file(input_file)
     raise InvalidInputError, 'weird file input' unless File.file?(input_file)
+  end
+
+  def self.validate_content
+    if intergalactics.empty? || credits.empty? || questions.empty?
+      raise InvalidContentError, 'weird file input content'
+    end
   end
 
   def self.intergalactic?(sentence)

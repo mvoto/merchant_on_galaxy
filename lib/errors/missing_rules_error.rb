@@ -1,3 +1,0 @@
-class MissingRulesError < StandardError
-
-end

@@ -46,4 +46,34 @@ describe FileReader do
       end
     end
   end
+
+  context 'given an input file without intergalactics' do
+    let(:no_intergalactics_input) { './spec/support/no_intergalactics_input.txt' }
+
+    it 'raises Invalid Content Error' do
+      expect { described_class.perform(no_intergalactics_input) }.to raise_error(
+        InvalidContentError
+      )
+    end
+  end
+
+  context 'given an input file without credits' do
+    let(:no_credits_input) { './spec/support/no_credits_input.txt' }
+
+    it 'raises Invalid Content Error' do
+      expect { described_class.perform(no_credits_input) }.to raise_error(
+        InvalidContentError
+      )
+    end
+  end
+
+  context 'given an input file without questions' do
+    let(:no_questions_input) { './spec/support/no_questions_input.txt' }
+
+    it 'raises Invalid Content Error' do
+      expect { described_class.perform(no_questions_input) }.to raise_error(
+        InvalidContentError
+      )
+    end
+  end
 end
