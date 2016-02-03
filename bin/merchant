@@ -1,4 +1,4 @@
 #!/usr/bin/env ruby
 require File.expand_path('../../lib/merchant_on_galaxy', __FILE__)
 
-MerchantOnGalaxy.run(ARGV[0] || './input_sample.txt')
+puts MerchantOnGalaxy.run(ARGV[0] || './input_sample.txt')
