@@ -1,3 +1,4 @@
+# Extracts info using regex from credit sentences
 class CreditInfo
   attr_reader :until_mineral_word, :value, :mineral
 

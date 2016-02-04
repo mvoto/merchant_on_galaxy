@@ -1,3 +1,4 @@
+# Extracts info using regex from question sentences
 class QuestionInfo
   attr_reader :full_sentence, :mineral, :galaxy_units, :roman_galaxy_units
 

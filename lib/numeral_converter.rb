@@ -1,3 +1,4 @@
+# Converts roman to arabic numerals
 class NumeralConverter
   ROMAN_TO_ARABIC = {
     1    => 'I',
@@ -16,8 +17,9 @@ class NumeralConverter
   }
 
   def self.roman_to_arabic(value)
-    value = value.upcase
+    value  = value.upcase
     result = 0
+
     ROMAN_TO_ARABIC.values.reverse.each do |roman|
       while value.start_with?(roman)
         value = value.slice(roman.length, value.length)
