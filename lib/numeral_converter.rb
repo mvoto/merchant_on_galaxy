@@ -19,7 +19,6 @@ class NumeralConverter
     value = value.upcase
     result = 0
     ROMAN_TO_ARABIC.values.reverse.each do |roman|
-      # TODO: refactor this
       while value.start_with?(roman)
         value = value.slice(roman.length, value.length)
         result += ROMAN_TO_ARABIC.key(roman)
