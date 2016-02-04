@@ -19,7 +19,7 @@ class MerchantOnGalaxy
     answers      = Oracle.perform(translator)
 
     answers.join("\n")
-  rescue InvalidInputError, InvalidContentError => e
-    puts "Sorry, something went wrong: #{e.message}"
+  rescue InvalidInputError, InvalidContentError => error
+    puts "Sorry, something went wrong: #{error.message}"
   end
 end
