@@ -1,7 +1,7 @@
 # The Incredible Merchant's Guide to the Galaxy
 
 This is a ruby script which is a guide for any Merchant who wants to travel through the
-Galaxy and may need to convert their intergalactic units into numerals.
+Galaxy and may need to convert their galaxy units into numerals.
 
 ## How to Use It
 

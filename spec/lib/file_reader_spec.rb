@@ -2,7 +2,7 @@ describe FileReader do
   describe '.perform' do
     context 'given a valid input file' do
       let(:valid_input_file) { './input_sample.txt' }
-      let(:intergalactics) do
+      let(:galaxy_units) do
         [
           "glob is I",
           "prok is V",
@@ -27,11 +27,11 @@ describe FileReader do
         ]
       end
       let(:expected_content) do
-        { intergalactics: intergalactics, credits: credits, questions: questions }
+        { galaxy_units: galaxy_units, credits: credits, questions: questions }
       end
       subject { described_class.perform(valid_input_file) }
 
-      it 'defines intergalactics, credits and questions from file content' do
+      it 'defines galaxy_units, credits and questions from file content' do
         expect(subject).to eq(expected_content)
       end
     end
@@ -47,11 +47,11 @@ describe FileReader do
     end
   end
 
-  context 'given an input file without intergalactics' do
-    let(:no_intergalactics_input) { './spec/support/no_intergalactics_input.txt' }
+  context 'given an input file without galaxy units' do
+    let(:no_galaxy_units_input) { './spec/support/no_galaxy_units_input.txt' }
 
     it 'raises Invalid Content Error' do
-      expect { described_class.perform(no_intergalactics_input) }.to raise_error(
+      expect { described_class.perform(no_galaxy_units_input) }.to raise_error(
         InvalidContentError
       )
     end

@@ -1,12 +1,12 @@
 # This class receives the input file, reads it and separates file content into
-# intergalactics, credits and questions hash
+# galaxy units, credits and questions hash
 class FileReader
   def self.perform(input_file)
     validate_file(input_file)
     @input_lines = File.read(input_file).split(/\n/)
     validate_content
 
-    { intergalactics: intergalactics, credits: credits, questions: questions }
+    { galaxy_units: galaxy_units, credits: credits, questions: questions }
   end
 
   private
@@ -19,12 +19,12 @@ class FileReader
   end
 
   def self.validate_content
-    if intergalactics.empty? || credits.empty? || questions.empty?
+    if galaxy_units.empty? || credits.empty? || questions.empty?
       raise InvalidContentError, 'weird file input content'
     end
   end
 
-  def self.intergalactic?(sentence)
+  def self.galaxy_unit?(sentence)
     !credit?(sentence) && !question?(sentence)
   end
 
@@ -36,8 +36,8 @@ class FileReader
     sentence.end_with?('?')
   end
 
-  def self.intergalactics
-    input_lines.select { |line| intergalactic?(line) }
+  def self.galaxy_units
+    input_lines.select { |line| galaxy_unit?(line) }
   end
 
   def self.credits

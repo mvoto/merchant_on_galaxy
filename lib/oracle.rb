@@ -29,9 +29,9 @@ class Oracle
     full_sentence  = question[/(?<=how\smany\sCredits\sis\s)(.*)(?=\s\?)/]
     return weird_question_message if full_sentence.nil? || !full_sentence.match(/[A-Z][a-z]+/)
     mineral        = full_sentence[/[A-Z][a-z]+/]
-    intergalactics = full_sentence[/.*(?=\s[A-Z][a-z]+)/]
+    galaxy_units = full_sentence[/.*(?=\s[A-Z][a-z]+)/]
 
-    roman = intergalactics.split(' ').map { |interg| dictionary[:intergalactic][interg.to_sym] }.join
+    roman = galaxy_units.split(' ').map { |interg| dictionary[:galaxy_unit][interg.to_sym] }.join
     return weird_question_message if roman.empty?
     answer_value = NumeralConverter.roman_to_arabic(roman) * dictionary[:mineral][mineral.to_sym]
 
@@ -39,18 +39,18 @@ class Oracle
   end
 
   def self.answer_roman(question)
-    intergalactics = question[/(?<=how\smuch\sis\s)(.*)(?=\s\?)/]
-    return weird_question_message if intergalactics.nil?
+    galaxy_units = question[/(?<=how\smuch\sis\s)(.*)(?=\s\?)/]
+    return weird_question_message if galaxy_units.nil?
 
     # TODO: maybe a method would help here ?
-    roman = intergalactics.split(' ').map do |interg|
-      roman_value = dictionary[:intergalactic][interg.to_sym]
+    roman = galaxy_units.split(' ').map do |interg|
+      roman_value = dictionary[:galaxy_unit][interg.to_sym]
       return weird_question_message if roman_value.nil?
       roman_value
     end.join
 
     answer_value = NumeralConverter.roman_to_arabic(roman)
-    "#{intergalactics} is #{sprintf("%g", answer_value)}"
+    "#{galaxy_units} is #{sprintf("%g", answer_value)}"
   end
 
   def self.weird_question_message

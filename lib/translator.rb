@@ -1,28 +1,28 @@
-# Given intergalactics and credits info, this class figures out the arabic values for
-# intergalactic info and mineral info(Silver, Gold, Iron)
+# Given galaxy units and credits info, this class figures out the arabic values for
+# galaxy unit info and mineral info(Silver, Gold, Iron)
 class Translator
   attr_reader :dictionary, :questions
 
   def initialize(args = {})
-    @intergalactics = args[:intergalactics]
+    @galaxy_units   = args[:galaxy_units]
     @credits        = args[:credits]
     @questions      = args[:questions]
   end
 
   def dictionary
     @dictionary ||= {
-      intergalactic: intergalactics_hash,
+      galaxy_unit: galaxy_units_hash,
       mineral: minerals_hash
     }
   end
 
   private
-  attr_reader :intergalactics, :credits
+  attr_reader :galaxy_units, :credits
 
   # This mounts something like this: { glob: I, pish: V , grok: X }
-  def intergalactics_hash
+  def galaxy_units_hash
     hsh = {}
-    intergalactics.each { |sentence| update_intergalactic_hash(hsh, sentence) }
+    galaxy_units.each { |sentence| update_galaxy_unit_hash(hsh, sentence) }
 
     hsh
   end
@@ -35,8 +35,8 @@ class Translator
     hsh
   end
 
-  def update_intergalactic_hash(hsh, intergalactic)
-    hsh[intergalactic.split(' ').first.to_sym] = intergalactic.split(' ').last
+  def update_galaxy_unit_hash(hsh, galaxy_unit)
+    hsh[galaxy_unit.split(' ').first.to_sym] = galaxy_unit.split(' ').last
   end
 
   def update_credit_hash(hsh, credit)
@@ -51,7 +51,7 @@ class Translator
   end
 
   def roman(sentence)
-    sentence.split(' ').map { |interg| intergalactics_hash[interg.to_sym] }.join
+    sentence.split(' ').map { |interg| galaxy_units_hash[interg.to_sym] }.join
   end
 
   def material_value(credit_info, arabic)

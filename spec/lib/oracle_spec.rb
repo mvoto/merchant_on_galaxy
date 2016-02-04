@@ -3,7 +3,7 @@ describe Oracle do
     context 'given valid questions with translator' do
       let(:valid_args) do
         {
-          intergalactics: ['glob is I'],
+          galaxy_units: ['glob is I'],
           credits: ['glob glob Silver is 10 Credits'],
           questions: ['how much is glob glob ?', 'how many Credits is glob Silver ?']
         }
@@ -19,7 +19,7 @@ describe Oracle do
     context 'given invalid questions with translator' do
       let(:no_idea_args) do
         {
-          intergalactics: ['glob is I'],
+          galaxy_units: ['glob is I'],
           credits: ['glob glob Silver is 10 Credits'],
           questions: ['how much chuca waka ?', 'how many Credits is mogo Loco ?']
         }
