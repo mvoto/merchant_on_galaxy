@@ -1,10 +1,10 @@
 Bundler.require :default
 
 Dir['./lib/errors/*.rb'].each { |file| require file }
-require  './lib/numeral_converter.rb'
+Dir['./lib/regex_extractors/*.rb'].each { |file| require file }
+Dir['./lib/utils/*.rb'].each { |file| require file }
+
 require  './lib/file_reader.rb'
-require  './lib/credit_info.rb'
-require  './lib/question_info.rb'
 require  './lib/translator.rb'
 require  './lib/oracle.rb'
 require  './lib/merchant_on_galaxy.rb'
