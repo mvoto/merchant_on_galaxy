@@ -4,7 +4,7 @@ describe CreditInfo do
     subject { described_class.new(credit) }
 
     it 'extracts until credits word' do
-      expect(subject.until_material_word).to eq('glob glob')
+      expect(subject.until_mineral_word).to eq('glob glob')
     end
 
     it 'extracts value' do
@@ -12,7 +12,7 @@ describe CreditInfo do
     end
 
     it 'extracts mineral' do
-      expect(subject.material).to eq('Silver')
+      expect(subject.mineral).to eq('Silver')
     end
   end
 end

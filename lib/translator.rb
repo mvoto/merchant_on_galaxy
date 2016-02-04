@@ -10,10 +10,7 @@ class Translator
   end
 
   def dictionary
-    @dictionary ||= {
-      galaxy_unit: galaxy_units_hash,
-      mineral: minerals_hash
-    }
+    @dictionary ||= { galaxy_unit: galaxy_units_hash, mineral: minerals_hash }
   end
 
   private
@@ -21,29 +18,21 @@ class Translator
 
   # This mounts something like this: { glob: I, pish: V , grok: X }
   def galaxy_units_hash
-    hsh = {}
-    galaxy_units.each { |sentence| update_galaxy_unit_hash(hsh, sentence) }
-
-    hsh
+    galaxy_units.each_with_object({}) do |sentence, hsh|
+      hsh[sentence.split(' ').first.to_sym] = sentence.split(' ').last
+    end
   end
 
   # This mounts something like this: { :Silver => 7, :Gold => 21, :Iron => 2 }
   def minerals_hash
-    hsh = {}
-    credits.each { |credit| update_credit_hash(hsh, credit) }
-
-    hsh
+    credits.each_with_object({}) { |sentence, hsh| update_credit_hash(sentence, hsh) }
   end
 
-  def update_galaxy_unit_hash(hsh, galaxy_unit)
-    hsh[galaxy_unit.split(' ').first.to_sym] = galaxy_unit.split(' ').last
-  end
+  def update_credit_hash(sentence, hsh)
+    credit_info = initialize_credit_info(sentence)
+    arabic      = arabic_value(credit_info.until_mineral_word)
 
-  def update_credit_hash(hsh, credit)
-    credit_info = CreditInfo.new(credit)
-    arabic      = arabic_value(credit_info.until_material_word)
-
-    hsh[credit_info.material.to_sym] = material_value(credit_info, arabic)
+    hsh[credit_info.mineral.to_sym] = mineral_value(credit_info, arabic)
   end
 
   def arabic_value(sentence)
@@ -54,7 +43,11 @@ class Translator
     sentence.split(' ').map { |interg| galaxy_units_hash[interg.to_sym] }.join
   end
 
-  def material_value(credit_info, arabic)
+  def mineral_value(credit_info, arabic)
     credit_info.value.to_f / arabic
+  end
+
+  def initialize_credit_info(sentence)
+    CreditInfo.new(sentence)
   end
 end
