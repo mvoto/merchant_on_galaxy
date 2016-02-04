@@ -1,6 +1,5 @@
 # Answers all the questions(that are known)
 class Oracle
-
   def self.perform(translator)
     @dictionary = translator.dictionary
 
@@ -13,10 +12,10 @@ class Oracle
   end
 
   def self.answer_questions(questions)
-    questions.map { |question| answer(question) }
+    questions.map { |question| decide_answer(question) }
   end
 
-  def self.answer(question)
+  def self.decide_answer(question)
     info = initialize_question_info(question)
     credit?(question) ? credit_answer(question, info) : roman_answer(question, info)
   end
@@ -26,29 +25,36 @@ class Oracle
   end
 
   def self.credit_answer(sentence, question_info)
-    mineral       = question_info.mineral
-    galaxy_units  = question_info.galaxy_units
-    return weird_question_message if question_info.full_sentence.nil? || !question_info.full_sentence.match(/[A-Z][a-z]+/)
+    return weird_question_message if nil_or_empty_info?(question_info.full_sentence)
 
-    roman = galaxy_units.split(' ').map { |interg| dictionary[:galaxy_unit][interg.to_sym] }.join
-    return weird_question_message if roman.empty?
-    answer_value = NumeralConverter.roman_to_arabic(roman) * dictionary[:mineral][mineral.to_sym]
+    roman = extract_roman(question_info.galaxy_units)
+    return weird_question_message if nil_or_empty_info?(roman)
+    answer_value = calculate_credit_answer(roman, question_info.mineral)
 
     "#{question_info.full_sentence} is #{sprintf("%g", answer_value)} Credits"
   end
 
   def self.roman_answer(sentence, question_info)
-    return weird_question_message if question_info.roman_galaxy_units.nil?
-
-    # TODO: maybe a method would help here ?
-    roman = question_info.roman_galaxy_units.split(' ').collect do |interg|
-      roman_value = dictionary[:galaxy_unit][interg.to_sym]
-      return weird_question_message if roman_value.nil?
-      roman_value
-    end.join
+    return weird_question_message if nil_or_empty_info?(question_info.roman_galaxy_units)
+    roman = extract_roman(question_info.roman_galaxy_units)
+    return weird_question_message if nil_or_empty_info?(roman)
 
     answer_value = NumeralConverter.roman_to_arabic(roman)
+
     "#{question_info.roman_galaxy_units} is #{sprintf("%g", answer_value)}"
+  end
+
+  def self.extract_roman(galaxy_units)
+    galaxy_units.split(' ').collect do |unit|
+      dictionary[:galaxy_unit][unit.to_sym]
+    end.join
+  end
+
+  def self.calculate_credit_answer(roman, mineral)
+    mineral_value = dictionary[:mineral][mineral.to_sym]
+    roman_value   = NumeralConverter.roman_to_arabic(roman)
+
+    roman_value * mineral_value
   end
 
   def self.weird_question_message
@@ -57,5 +63,9 @@ class Oracle
 
   def self.initialize_question_info(sentence)
     QuestionInfo.new(sentence)
+  end
+
+  def self.nil_or_empty_info?(info)
+    info.nil? || info.empty?
   end
 end
